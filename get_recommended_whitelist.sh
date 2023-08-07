@@ -40,6 +40,7 @@ urls=(
     https://raw.githubusercontent.com/AdguardTeam/HttpsExclusions/master/exclusions/android.txt
     https://raw.githubusercontent.com/AdguardTeam/HttpsExclusions/master/exclusions/sensitive.txt
     https://raw.githubusercontent.com/AdguardTeam/HttpsExclusions/master/exclusions/firefox.txt
+    https://gist.githubusercontent.com/KevinNitroG/fd9d2a8ea51ae652f45a53656a85d84e/raw/white%2520list%2520domain.txt
 )
 
 # loop through the urls and download each file with curl
