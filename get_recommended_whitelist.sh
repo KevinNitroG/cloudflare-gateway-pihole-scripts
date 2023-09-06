@@ -1,9 +1,9 @@
 #!/bin/bash
 #  
-# Use the provided lists or add you own
-# https://oisd.nl/includedlists/whitelists
-# by creating an empty whitelist.csv file
-touch whitelist.csv
+# Use the provided lists or add your own.
+# There is no limit on the amount of whitelisted domains you can have.
+
+source $(dirname "$0")/helpers.sh
 
 # declare an array of urls
 urls=(
@@ -13,8 +13,6 @@ urls=(
     https://raw.githubusercontent.com/TogoFire-Home/AD-Settings/main/Filters/whitelist.txt
     https://raw.githubusercontent.com/freekers/whitelist/master/domains/whitelist.txt
     https://raw.githubusercontent.com/DandelionSprout/AdGuard-Home-Whitelist/master/whitelist.txt
-    # Commented out because it looks suspicious
-    # https://www.aadvantageeshopping.com/adBlockWhitelist.php
     https://raw.githubusercontent.com/AdguardTeam/AdGuardSDNSFilter/master/Filters/exclusions.txt
     https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/optional-list.txt
     https://raw.githubusercontent.com/AdguardTeam/HttpsExclusions/master/exclusions/issues.txt
@@ -32,6 +30,8 @@ urls=(
     https://raw.githubusercontent.com/AdguardTeam/HttpsExclusions/master/exclusions/firefox.txt
     # Commented out because it whitelists sites including doubleclick.net and ad.atdmt.com
     # https://raw.githubusercontent.com/anudeepND/whitelist/master/domains/referral-sites.txt
+    # Uncomment the line below to use OISD's most commmonly whitelisted list
+    # https://local.oisd.nl/extract/commonly_whitelisted.php
 
     # USER LIST
     https://raw.githubusercontent.com/AdguardTeam/HttpsExclusions/master/exclusions/banks.txt
@@ -43,18 +43,8 @@ urls=(
     https://gist.githubusercontent.com/KevinNitroG/fd9d2a8ea51ae652f45a53656a85d84e/raw/white%2520list%2520domain.txt
 )
 
-# loop through the urls and download each file with curl
-for url in "${urls[@]}"; do
-  # get the file name from the url
-  file=$(basename "$url")
-  # download the file with curl and save it as file.txt
-  curl -o "$file.txt" "$url"
-  # append the file contents to whitelist.csv and add a newline
-  cat "$file.txt" >> whitelist.csv
-  echo "" >> whitelist.csv
-  # remove the file.txt
-  rm "$file.txt"
-done
+# download all files in parallel and append them to whitelist.csv
+download_lists $urls 'whitelist.csv'
 
 # print a message when done
 echo "Done. The whitelist.csv file contains merged data from recommended whitelists."
